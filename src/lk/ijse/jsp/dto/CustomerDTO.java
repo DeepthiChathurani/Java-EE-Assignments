@@ -1,4 +1,4 @@
-package lk.ijse.json_with_ajax.dto;
+package lk.ijse.jsp.dto;
 
 public class CustomerDTO {
     private String id;
