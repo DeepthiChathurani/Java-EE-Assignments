@@ -6,13 +6,17 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="Json-with-Ajax" />
+          <element id="module-output" name="Json-with-Ajax1" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="javax.json-1.1.4" />
           <element id="library" level="project" name="javax.json-api-1.1.4" />
           <element id="library" level="project" name="mysql-connector-j-8.1.0" />
+          <element id="library" level="project" name="json-p" />
+          <element id="library" level="project" name="lib" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="Json-with-Ajax1/web/Web" />
     </root>
   </artifact>
 </component>

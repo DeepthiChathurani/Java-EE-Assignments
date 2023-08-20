@@ -100,6 +100,7 @@ public class CustomerServlet extends HttpServlet {
                         customerObject.add("data","");
                        resp.getWriter().print(customerObject.build());
                     }
+
                     break;
                 case "delete":
                     PreparedStatement pstm2 = connection.prepareStatement("delete from Customer where id=?");

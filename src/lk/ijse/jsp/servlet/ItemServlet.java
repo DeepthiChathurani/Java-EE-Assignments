@@ -90,17 +90,34 @@ public class ItemServlet extends HttpServlet {
                     pstm.setObject(2, itemName);
                     pstm.setObject(3, qty);
                     pstm.setObject(4, unitPrice);
+                    resp.addHeader("Content-Type","application/json");
+
                     if (pstm.executeUpdate() > 0) {
-                        resp.getWriter().println("Item Added..!");
-                        resp.sendRedirect("item");
+//                        resp.getWriter().println("Item Added..!");
+//                        resp.sendRedirect("item");
+                        JsonObjectBuilder customerObject =Json.createObjectBuilder();
+
+                        customerObject.add("state","ok");
+                        customerObject.add("message","Successfully Added..!");
+                        customerObject.add("data","");
+                        resp.getWriter().print(customerObject.build());
                     }
                     break;
                 case "delete":
                     PreparedStatement pstm2 = connection.prepareStatement("delete from Item where code=?");
                     pstm2.setObject(1, code);
+                    resp.addHeader("Content-Type","application/json");
+
                     if (pstm2.executeUpdate() > 0) {
+//                        resp.getWriter().println("Item Deleted..!");
+//                        resp.sendRedirect("/jsonp/pages/item.html");
                         resp.getWriter().println("Item Deleted..!");
-                        resp.sendRedirect("/jsonp/pages/item.html");
+                        JsonObjectBuilder deleteObject =Json.createObjectBuilder();
+
+                        deleteObject.add("state","ok");
+                        deleteObject.add("message","Item Customer");
+                        deleteObject.add("data","");
+                        resp.getWriter().print(deleteObject.build());
                     }
                     break;
                 case "update":
@@ -109,15 +126,30 @@ public class ItemServlet extends HttpServlet {
                     pstm3.setObject(2, qty);
                     pstm3.setObject(3, unitPrice);
                     pstm3.setObject(4, code);
+                    resp.addHeader("Content-Type","application/json");
                     if (pstm3.executeUpdate() > 0) {
+//                        resp.getWriter().println("Item Updated..!");
+//                        resp.sendRedirect("/jsonp/pages/item.html");
                         resp.getWriter().println("Item Updated..!");
-                        resp.sendRedirect("/jsonp/pages/item.html");
+                        JsonObjectBuilder updateObject =Json.createObjectBuilder();
+
+                        updateObject.add("state","ok");
+                        updateObject.add("message","Update Item..!");
+                        updateObject.add("data","");
+                        resp.getWriter().print(updateObject.build());
                     }
                     break;
             }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
+            JsonObjectBuilder customerObject =Json.createObjectBuilder();
+
+            customerObject.add("state","error");
+            customerObject.add("message","Added Unsuccessfuly..!");
+            customerObject.add("data","");
+            resp.getWriter().print(customerObject.build());
+            resp.setStatus(400);
             throw new RuntimeException(e);
         }
     }

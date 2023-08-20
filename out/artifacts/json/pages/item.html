@@ -56,9 +56,9 @@
             </div>
             </form>
             <div class="btn-group">
-                <button type="button" class="btn btn-primary" id="btnItem">Add Item</button>
-                <button type="button" class="btn btn-danger" id="btnItemDelete">Remove</button>
-                <button type="button" class="btn btn-warning" id="btnItemUpdate">Update</button>
+                <button form="itemForm" formmethod="post"  formaction="item?option=add" class="btn btn-primary" id="btnItem">Add Item</button>
+                <button form="itemForm" formmethod="post"  formaction="item?option=delete" class="btn btn-danger" id="btnItemDelete">Remove</button>
+                <button form="itemForm" formmethod="post"  formaction="item?option=update" class="btn btn-warning" id="btnItemUpdate">Update</button>
                 <button  type="button" class="btn btn-success"id="btnGetAll">Get All</button>
                 <button form="itemForm" type="reset" class="btn btn-danger" id="btn-clear">Clear All</button>
             </div>
