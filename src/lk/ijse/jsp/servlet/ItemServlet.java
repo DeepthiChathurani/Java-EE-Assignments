@@ -1,7 +1,5 @@
 package lk.ijse.jsp.servlet;
 
-import lk.ijse.jsp.dto.ItemDTO;
-
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
@@ -12,40 +10,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
+
+
 
 @WebServlet(urlPatterns = "/pages/item")
 public class ItemServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shop", "root", "1234");
-            PreparedStatement pstm = connection.prepareStatement("select * from Item");
-            ResultSet rst = pstm.executeQuery();
+            PreparedStatement pstm1 = connection.prepareStatement("select * from item");
+            ResultSet rst = pstm1.executeQuery();
 
             resp.addHeader("Content-Type","application/json");
-
-//            String json="[";
-//            while (rst.next()) {
-//                String item="{";
-//                String code = rst.getString(1);
-//                String description = rst.getString(2);
-//                String qty = rst.getString(3);
-//                String unitPrice = rst.getString(4);
-//                item+="\"code\":\""+code+"\",";
-//                item+="\"description\":\""+description+"\",";
-//                item+="\"qty\":\""+qty+"\"";
-//                item+="\"unitPrice\":\""+unitPrice+"\"";
-//                item+="},";
-//                json+=item;
-//            }
-//            json=json+"]";
-//
-//            resp.getWriter().print(json.substring(0,json.length()-2)+"]");
-//            req.setAttribute("keyTwo", allItems);
-//            req.getRequestDispatcher("item.html").forward(req, resp);
 
             JsonArrayBuilder allItems = Json.createArrayBuilder();
             while (rst.next()){
@@ -63,9 +42,7 @@ public class ItemServlet extends HttpServlet {
             }
             resp.setContentType("application/json");
             resp.getWriter().print(allItems.build());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -79,13 +56,13 @@ public class ItemServlet extends HttpServlet {
         String qty = req.getParameter("qty");
         String unitPrice = req.getParameter("unitPrice");
         String option = req.getParameter("option");
-//
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shop", "root", "1234");
             switch (option) {
                 case "add":
-                    PreparedStatement pstm = connection.prepareStatement("insert into Item values(?,?,?,?)");
+                    PreparedStatement pstm = connection.prepareStatement("insert into item values(?,?,?,?)");
                     pstm.setObject(1, code);
                     pstm.setObject(2, itemName);
                     pstm.setObject(3, qty);
@@ -93,43 +70,41 @@ public class ItemServlet extends HttpServlet {
                     resp.addHeader("Content-Type","application/json");
 
                     if (pstm.executeUpdate() > 0) {
-//                        resp.getWriter().println("Item Added..!");
-//                        resp.sendRedirect("item");
-                        JsonObjectBuilder customerObject =Json.createObjectBuilder();
 
-                        customerObject.add("state","ok");
-                        customerObject.add("message","Successfully Added..!");
-                        customerObject.add("data","");
-                        resp.getWriter().print(customerObject.build());
+                        JsonObjectBuilder itemObject =Json.createObjectBuilder();
+
+                        itemObject.add("state","ok");
+                        itemObject.add("message","Successfully Added..!");
+                        itemObject.add("data","");
+                        resp.getWriter().print(itemObject.build());
                     }
                     break;
                 case "delete":
-                    PreparedStatement pstm2 = connection.prepareStatement("delete from Item where code=?");
+                    PreparedStatement pstm2 = connection.prepareStatement("delete from item where code=?");
                     pstm2.setObject(1, code);
                     resp.addHeader("Content-Type","application/json");
 
                     if (pstm2.executeUpdate() > 0) {
-//                        resp.getWriter().println("Item Deleted..!");
-//                        resp.sendRedirect("/jsonp/pages/item.html");
+
                         resp.getWriter().println("Item Deleted..!");
                         JsonObjectBuilder deleteObject =Json.createObjectBuilder();
 
                         deleteObject.add("state","ok");
-                        deleteObject.add("message","Item Customer");
+                        deleteObject.add("message","Item delete");
                         deleteObject.add("data","");
                         resp.getWriter().print(deleteObject.build());
                     }
                     break;
                 case "update":
-                    PreparedStatement pstm3 = connection.prepareStatement("update Item set description=?,qtyOnHand=?,unitPrice=? where code=?");
+                    PreparedStatement pstm3 = connection.prepareStatement("update item set description=?,qtyOnHand=?,unitPrice=? where code=?");
+                    pstm3.setObject(4, code);
                     pstm3.setObject(1, itemName);
                     pstm3.setObject(2, qty);
                     pstm3.setObject(3, unitPrice);
-                    pstm3.setObject(4, code);
+
                     resp.addHeader("Content-Type","application/json");
                     if (pstm3.executeUpdate() > 0) {
-//                        resp.getWriter().println("Item Updated..!");
-//                        resp.sendRedirect("/jsonp/pages/item.html");
+
                         resp.getWriter().println("Item Updated..!");
                         JsonObjectBuilder updateObject =Json.createObjectBuilder();
 
@@ -143,12 +118,12 @@ public class ItemServlet extends HttpServlet {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } catch (SQLException e) {
-            JsonObjectBuilder customerObject =Json.createObjectBuilder();
+            JsonObjectBuilder itemObject =Json.createObjectBuilder();
 
-            customerObject.add("state","error");
-            customerObject.add("message","Added Unsuccessfuly..!");
-            customerObject.add("data","");
-            resp.getWriter().print(customerObject.build());
+            itemObject.add("state","error");
+            itemObject.add("message","Added Unsuccessful..!");
+            itemObject.add("data","");
+            resp.getWriter().print(itemObject.build());
             resp.setStatus(400);
             throw new RuntimeException(e);
         }
