@@ -86,7 +86,7 @@ public class ItemServlet extends HttpServlet {
 
                     if (pstm2.executeUpdate() > 0) {
 
-                        resp.getWriter().println("Item Deleted..!");
+
                         JsonObjectBuilder deleteObject =Json.createObjectBuilder();
 
                         deleteObject.add("state","ok");
@@ -105,7 +105,6 @@ public class ItemServlet extends HttpServlet {
                     resp.addHeader("Content-Type","application/json");
                     if (pstm3.executeUpdate() > 0) {
 
-                        resp.getWriter().println("Item Updated..!");
                         JsonObjectBuilder updateObject =Json.createObjectBuilder();
 
                         updateObject.add("state","ok");

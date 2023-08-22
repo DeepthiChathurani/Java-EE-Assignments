@@ -107,7 +107,7 @@ public class CustomerServlet extends HttpServlet {
                     pstm2.setObject(1, cusID);
                     resp.addHeader("Content-Type","application/json");
                     if (pstm2.executeUpdate() > 0) {
-                        resp.getWriter().println("Customer Deleted..!");
+
                         JsonObjectBuilder deleteObject =Json.createObjectBuilder();
 
                         deleteObject.add("state","ok");
@@ -121,9 +121,11 @@ public class CustomerServlet extends HttpServlet {
                     pstm3.setObject(3, cusID);
                     pstm3.setObject(1, cusName);
                     pstm3.setObject(2, cusAddress);
+
+
                     resp.addHeader("Content-Type","application/json");
                     if (pstm3.executeUpdate() > 0) {
-                        resp.getWriter().println("Customer Updated..!");
+
                         JsonObjectBuilder updateObject =Json.createObjectBuilder();
 
                         updateObject.add("state","ok");
