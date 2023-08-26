@@ -112,11 +112,16 @@
     }
 
     $("#btnGetAll").click(function(){
-
         <!--send ajax request to the customer servlet using jQuery-->
        getAll();
 
     });
+    function clear(id,name,address,salary){
+        $("#txtCustomerID").val(id);
+        $("#txtCustomerName").val(name);
+        $("#txtCustomerAddress").val(address);
+        $("#txtCustomerSalary").val(salary);
+    }
 
     $("#btnCustomer").click(function () {
         let formData =$("#customerForm").serialize();
@@ -180,6 +185,7 @@
                     $("#tblCustomer").append(row);
                 }
                 bindRowClickEvent();
+                clear("","","","");
             }
         });
     }

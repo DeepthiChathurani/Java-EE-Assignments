@@ -3,14 +3,14 @@ package lk.ijse.jsp.dto;
 public class ItemDTO {
     private String code;
     private String description;
-    private int qty;
-    private double unitPrice;
+    private String qty;
+    private String unitPrice;
 
 
     public ItemDTO() {
     }
 
-    public ItemDTO(String code, String description, int qty, double unitPrice) {
+    public ItemDTO(String code, String description, String qty, String unitPrice) {
         this.code = code;
         this.description = description;
         this.qty = qty;
@@ -33,19 +33,19 @@ public class ItemDTO {
         this.description = description;
     }
 
-    public int getQty() {
+    public String getQty() {
         return qty;
     }
 
-    public void setQty(int qtyOnHand) {
+    public void setQty(String qtyOnHand) {
         this.qty = qtyOnHand;
     }
 
-    public double getUnitPrice() {
+    public String getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(String unitPrice) {
         this.unitPrice = unitPrice;
     }
 }

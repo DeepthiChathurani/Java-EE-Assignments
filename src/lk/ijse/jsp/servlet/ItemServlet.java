@@ -30,8 +30,8 @@ public class ItemServlet extends HttpServlet {
             while (rst.next()){
                 String code = rst.getString(1);
                 String description= rst.getString(2);
-                int qty = Integer.parseInt(rst.getString(3));
-                double unitPrice = Double.parseDouble(rst.getString(4));
+                String qty = rst.getString(3);
+                String unitPrice = rst.getString(4);
 
                 JsonObjectBuilder itemObject =Json.createObjectBuilder();
                 itemObject.add("code",code);
@@ -54,8 +54,8 @@ public class ItemServlet extends HttpServlet {
 
         String code = req.getParameter("code");
         String itemName = req.getParameter("description");
-        int qty = Integer.parseInt(req.getParameter("qty"));
-        double unitPrice = Double.parseDouble(req.getParameter("unitPrice"));
+        String qty = req.getParameter("qty");
+        String unitPrice = req.getParameter("unitPrice");
         String option = req.getParameter("option");
 
         try {
@@ -84,14 +84,12 @@ public class ItemServlet extends HttpServlet {
                     PreparedStatement pstm2 = connection.prepareStatement("delete from item where code=?");
                     pstm2.setObject(1, code);
                     resp.addHeader("Content-Type","application/json");
-
                     if (pstm2.executeUpdate() > 0) {
-
 
                         JsonObjectBuilder deleteObject =Json.createObjectBuilder();
 
                         deleteObject.add("state","ok");
-                        deleteObject.add("message","Item delete");
+                        deleteObject.add("message","Delete Item");
                         deleteObject.add("data","");
                         resp.getWriter().print(deleteObject.build());
                     }

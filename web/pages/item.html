@@ -88,7 +88,7 @@
 <script>
     getAll();
     function bindRowClickEvent() {
-        $("#tblCustomer>tr").click(function () {
+        $("#tblItem>tr").click(function () {
             let code = $(this).children(":eq(0)").text();
             let description = $(this).children(":eq(1)").text();
             let qty = $(this).children(":eq(2)").text();
@@ -102,6 +102,13 @@
         });
 
     }
+    function clear(code,description,qty,unitPrice){
+        $("#itemCode").val(code);
+        $("#itemName").val(description);
+        $("#itemQty").val(qty);
+        $("#itemPrice").val(unitPrice);
+    }
+
     $("#btnGetAll").click(function(){
 
         <!--send ajax request to the customer servlet using jQuery-->
@@ -160,12 +167,6 @@
             }
         });
     });
-    function clear(code,description,qty,unitPrice){
-        $("#itemCode").val(code);
-        $("#itemName").val(description);
-        $("#itemQty").val(qty);
-        $("#itemPrice").val(unitPrice);
-    }
 
     function getAll() {
         $("#tblItem").empty();

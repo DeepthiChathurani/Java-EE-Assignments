@@ -86,6 +86,29 @@
 <script src="../assets/js/bootstrap.min.js"></script>
 
 <script>
+    getAll();
+    function bindRowClickEvent() {
+        $("#tblItem>tr").click(function () {
+            let code = $(this).children(":eq(0)").text();
+            let description = $(this).children(":eq(1)").text();
+            let qty = $(this).children(":eq(2)").text();
+            let unitPrice = $(this).children(":eq(3)").text();
+
+            $("#itemCode").val(code);
+            $("#itemName").val(description);
+            $("#itemQty").val(qty);
+            $("#itemPrice").val(unitPrice);
+
+        });
+
+    }
+    function clear(code,description,qty,unitPrice){
+        $("#itemCode").val(code);
+        $("#itemName").val(description);
+        $("#itemQty").val(qty);
+        $("#itemPrice").val(unitPrice);
+    }
+
     $("#btnGetAll").click(function(){
 
         <!--send ajax request to the customer servlet using jQuery-->
@@ -154,6 +177,8 @@
                     let row = `<tr><td>${item.code}</td><td>${item.description}</td><td>${item.qty}</td><td>${item.unitPrice}</td></tr>`;
                     $("#tblItem").append(row);
                 }
+                bindRowClickEvent();
+                clear("","","","");
             }
         });
     }
