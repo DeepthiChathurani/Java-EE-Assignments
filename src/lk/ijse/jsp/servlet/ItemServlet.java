@@ -30,8 +30,8 @@ public class ItemServlet extends HttpServlet {
             while (rst.next()){
                 String code = rst.getString(1);
                 String description= rst.getString(2);
-                String qty = rst.getString(3);
-                String unitPrice = rst.getString(4);
+                int qty = Integer.parseInt(rst.getString(3));
+                double unitPrice = Double.parseDouble(rst.getString(4));
 
                 JsonObjectBuilder itemObject =Json.createObjectBuilder();
                 itemObject.add("code",code);
@@ -42,6 +42,7 @@ public class ItemServlet extends HttpServlet {
             }
             resp.setContentType("application/json");
             resp.getWriter().print(allItems.build());
+
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
@@ -53,8 +54,8 @@ public class ItemServlet extends HttpServlet {
 
         String code = req.getParameter("code");
         String itemName = req.getParameter("description");
-        String qty = req.getParameter("qty");
-        String unitPrice = req.getParameter("unitPrice");
+        int qty = Integer.parseInt(req.getParameter("qty"));
+        double unitPrice = Double.parseDouble(req.getParameter("unitPrice"));
         String option = req.getParameter("option");
 
         try {
@@ -96,11 +97,12 @@ public class ItemServlet extends HttpServlet {
                     }
                     break;
                 case "update":
-                    PreparedStatement pstm3 = connection.prepareStatement("update item set description=?,qtyOnHand=?,unitPrice=? where code=?");
+                    PreparedStatement pstm3 = connection.prepareStatement("update item set description=?,qty=?,unitPrice=? where code=?");
                     pstm3.setObject(4, code);
                     pstm3.setObject(1, itemName);
                     pstm3.setObject(2, qty);
                     pstm3.setObject(3, unitPrice);
+
 
                     resp.addHeader("Content-Type","application/json");
                     if (pstm3.executeUpdate() > 0) {
@@ -120,7 +122,7 @@ public class ItemServlet extends HttpServlet {
             JsonObjectBuilder itemObject =Json.createObjectBuilder();
 
             itemObject.add("state","error");
-            itemObject.add("message","Added Unsuccessful..!");
+            itemObject.add("message","Added Unsuccessfully..!");
             itemObject.add("data","");
             resp.getWriter().print(itemObject.build());
             resp.setStatus(400);

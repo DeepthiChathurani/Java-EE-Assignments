@@ -6,7 +6,7 @@
     <meta content="width=device-width initial-scale=1" name="viewport">
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/styles.css" rel="stylesheet">
-    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    <link crossorigin="anonymous" href=" https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" rel="stylesheet">
     <style>
         ul > li {
@@ -59,7 +59,7 @@
                 <button type="button" class="btn btn-primary" id="btnItem">Add Item</button>
                 <button type="button" class="btn btn-danger" id="btnItemDelete">Remove</button>
                 <button type="button" class="btn btn-warning" id="btnItemUpdate">Update</button>
-                <button  type="button" class="btn btn-success"id="btnGetAll">Get All</button>
+                <button  type="button" class="btn btn-success" id="btnGetAll">Get All</button>
                 <button  type="button" class="btn btn-danger" id="btn-clear">Clear All</button>
             </div>
 
@@ -86,6 +86,22 @@
 <script src="../assets/js/bootstrap.min.js"></script>
 
 <script>
+    getAll();
+    function bindRowClickEvent() {
+        $("#tblCustomer>tr").click(function () {
+            let code = $(this).children(":eq(0)").text();
+            let description = $(this).children(":eq(1)").text();
+            let qty = $(this).children(":eq(2)").text();
+            let unitPrice = $(this).children(":eq(3)").text();
+
+            $("#itemCode").val(code);
+            $("#itemName").val(description);
+            $("#itemQty").val(qty);
+            $("#itemPrice").val(unitPrice);
+
+        });
+
+    }
     $("#btnGetAll").click(function(){
 
         <!--send ajax request to the customer servlet using jQuery-->
@@ -136,12 +152,23 @@
             method:"post",
             data: formData,
             success:function (res) {
+                alert(res.message);
                 getAll();
+            },
+            error:function (res) {
+                alert(res.message);
             }
         });
     });
+    function clear(code,description,qty,unitPrice){
+        $("#itemCode").val(code);
+        $("#itemName").val(description);
+        $("#itemQty").val(qty);
+        $("#itemPrice").val(unitPrice);
+    }
 
     function getAll() {
+        $("#tblItem").empty();
         $.ajax({
             url:'item',
             success:function (resp){
@@ -149,6 +176,8 @@
                     let row = `<tr><td>${item.code}</td><td>${item.description}</td><td>${item.qty}</td><td>${item.unitPrice}</td></tr>`;
                     $("#tblItem").append(row);
                 }
+                bindRowClickEvent();
+                clear("","","","");
             }
         });
     }

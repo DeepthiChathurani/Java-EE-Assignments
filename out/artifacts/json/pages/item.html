@@ -6,7 +6,7 @@
     <meta content="width=device-width initial-scale=1" name="viewport">
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/styles.css" rel="stylesheet">
-    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    <link crossorigin="anonymous" href=" https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" rel="stylesheet">
     <style>
         ul > li {
@@ -59,7 +59,7 @@
                 <button type="button" class="btn btn-primary" id="btnItem">Add Item</button>
                 <button type="button" class="btn btn-danger" id="btnItemDelete">Remove</button>
                 <button type="button" class="btn btn-warning" id="btnItemUpdate">Update</button>
-                <button  type="button" class="btn btn-success"id="btnGetAll">Get All</button>
+                <button  type="button" class="btn btn-success" id="btnGetAll">Get All</button>
                 <button  type="button" class="btn btn-danger" id="btn-clear">Clear All</button>
             </div>
 
@@ -136,12 +136,17 @@
             method:"post",
             data: formData,
             success:function (res) {
+                alert(res.message);
                 getAll();
+            },
+            error:function (res) {
+                alert(res.message);
             }
         });
     });
 
     function getAll() {
+        $("#tblItem").empty();
         $.ajax({
             url:'item',
             success:function (resp){

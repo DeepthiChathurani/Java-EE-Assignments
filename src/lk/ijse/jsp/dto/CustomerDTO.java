@@ -4,14 +4,16 @@ public class CustomerDTO {
     private String id;
     private String name;
     private String address;
+    private String salary;
 
     public CustomerDTO() {
     }
 
-    public CustomerDTO(String id, String name, String address) {
+    public CustomerDTO(String id, String name, String address , String salary) {
         this.id = id;
         this.name = name;
         this.address = address;
+        this.salary = salary;
     }
 
     public String getId() {
@@ -37,4 +39,8 @@ public class CustomerDTO {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String getSalary() {return salary;}
+
+    public void setSalary(String salary) {this.salary = salary;}
 }

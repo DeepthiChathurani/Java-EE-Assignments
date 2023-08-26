@@ -1,7 +1,5 @@
 package lk.ijse.jsp.servlet;
 
-import lk.ijse.jsp.dto.CustomerDTO;
-
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
@@ -12,14 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
+
 
 
 @WebServlet(urlPatterns = {"/pages/customer"})
 public class CustomerServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shop", "root", "1234");
@@ -27,35 +25,18 @@ public class CustomerServlet extends HttpServlet {
             ResultSet rst = pstm.executeQuery();
             resp.addHeader("Content-Type","application/json");
 
-//            String json="[";
-//            while (rst.next()) {
-//                String customer="{";
-//                String id = rst.getString(1);
-//                String name = rst.getString(2);
-//                String address = rst.getString(3);
-//                customer+="\"id\":\""+id+"\",";
-//                customer+="\"name\":\""+name+"\",";
-//                customer+="\"address\":\""+address+"\"";
-//                customer+="},";
-//                json+=customer;
-//            }
-//            json=json+"]";
-//
-//            resp.getWriter().print(json.substring(0,json.length()-2)+"]");
-            // create a json response including customer data
-            // String s= "[{id:""}]";
-            //send the output through the ajax response
-
             JsonArrayBuilder allCustomers = Json.createArrayBuilder();
             while (rst.next()){
                 String id = rst.getString(1);
                 String name= rst.getString(2);
                 String address = rst.getString(3);
+                String salary = rst.getString(4);
 
                 JsonObjectBuilder customerObject =Json.createObjectBuilder();
                 customerObject.add("id",id);
                 customerObject.add("name",name);
                 customerObject.add("address",address);
+                customerObject.add("salary",salary);
 
                allCustomers.add(customerObject.build());
             }
@@ -63,9 +44,7 @@ public class CustomerServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.getWriter().print(allCustomers.build());
 
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -84,10 +63,11 @@ public class CustomerServlet extends HttpServlet {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shop", "root", "1234");
             switch (option) {
                 case "add":
-                    PreparedStatement pstm = connection.prepareStatement("insert into Customer values(?,?,?)");
+                    PreparedStatement pstm = connection.prepareStatement("insert into Customer values(?,?,?,?)");
                     pstm.setObject(1, cusID);
                     pstm.setObject(2, cusName);
                     pstm.setObject(3, cusAddress);
+                    pstm.setObject(4, cusSalary);
 
                     resp.addHeader("Content-Type","application/json");
                     if (pstm.executeUpdate() > 0) {
@@ -117,10 +97,11 @@ public class CustomerServlet extends HttpServlet {
                     }
                     break;
                 case "update":
-                    PreparedStatement pstm3 = connection.prepareStatement("update Customer set name=?,address=? where id=?");
-                    pstm3.setObject(3, cusID);
+                    PreparedStatement pstm3 = connection.prepareStatement("update Customer set name=?,address=?,salary=? where id=?");
+                    pstm3.setObject(4, cusID);
                     pstm3.setObject(1, cusName);
                     pstm3.setObject(2, cusAddress);
+                    pstm3.setObject(3, cusSalary);
 
 
                     resp.addHeader("Content-Type","application/json");
@@ -144,7 +125,7 @@ public class CustomerServlet extends HttpServlet {
             JsonObjectBuilder customerObject =Json.createObjectBuilder();
 
             customerObject.add("state","error");
-            customerObject.add("message","Added Unsuccessfuly..!");
+            customerObject.add("message","Added Unsuccessfully..!");
             customerObject.add("data","");
             resp.getWriter().print(customerObject.build());
             resp.setStatus(400);
